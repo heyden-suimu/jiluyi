@@ -5,6 +5,7 @@ const login = r => require.ensure([], () => r(require('../page/login/login')), '
 const device = r => require.ensure([], () => r(require('../page/grapher/device')), 'device')
 const vedio = r => require.ensure([], () => r(require('../page/grapher/vedio')), 'vedio')
 const devStatus = r => require.ensure([], () => r(require('../page/grapher/devStatus')), 'devStatus')
+const inStore = r => require.ensure([], () => r(require('../page/grapher/inStore')), 'inStore')
 
 export default [{
     path: '/',
@@ -23,6 +24,7 @@ export default [{
                 {path: '/home/device',component: device},
                 {path: '/home/vedio',component: vedio},
                 {path: '/home/devStatus',component: devStatus},
+                {path: '/home/inStore',component: inStore},
             ]
         },
         //登陆注册页

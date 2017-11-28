@@ -1,22 +1,22 @@
 import fetch from '../config/fetch'
-// 获取版本列表
-var getVerlist = ()=>fetch("GET","/api/v1/ota/historyota",{})
+// 获取视频列表
+
+const vedioApi = (type = 'get', obj = {})=>fetch(type,"/api/v1/vw/cardvr/info",obj);
+// 删除
+const vedioDel = (type = 'get', obj = {})=>fetch(type,"/api/v1/vw/cardvr/delete",obj);
+
+// 通知后台上传
+const uploadVideo = (type = 'get', obj = {})=>fetch(type,"/api/v1/vw/cardvr/upload",obj);
+const progressVideo = (type = 'get', obj = {})=>fetch(type,"/api/v1/vw/cardvr/progress",obj);
+
+
+// 获取设备列表
+const deviceApi = (type = 'get', obj = {})=>fetch(type,`/api/v1/vw/device/status`,obj);
+// 获取总数
+const deviceCount = (type = 'get', obj = {})=>fetch(type,`/api/v1/vw/device/count`,obj);
+
+// 设备入库
+const addDevice = (type = 'get', obj = {})=>fetch(type,`/api/v1/vw/cardvr/device/statics`, obj);
+
 // 删除版本
-var deleteVer = (id)=>fetch("POST","/api/v1/ota/deleteota",{
-	id:id
-})
-// 添加版本
-var add_Ver = (prams)=>fetch("POST","/api/v1/ota/uploadota",prams)
-// 更新版本信息
-var ud_Ver = (prams)=>fetch("post","/api/v1/ota/updateota"+prams,{})
-// 得到文件映射列表
-var getOtaId = ()=>fetch("get","/api/v1/ota/idfilename",{})
-// 发布
-var publishVer = (id)=>fetch("post","/api/v1/ota/releaseota",{
-	id:id
-})
-// 获取可用版本来源
-var getavList = (type)=>fetch("GET","/api/v1/ota/historyversion",{
-	type:type
-})
-export {getVerlist,deleteVer,add_Ver,getOtaId,ud_Ver,publishVer,getavList}
+export {vedioApi, deviceApi, vedioDel, uploadVideo, addDevice, deviceCount, progressVideo}

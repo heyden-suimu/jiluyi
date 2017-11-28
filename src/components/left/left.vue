@@ -1,10 +1,11 @@
 <template>
     <section id='left'>
-        <el-menu default-active="2" class="el-menu-vertical-demo" theme="dark">
-          <el-menu-item index="1" @click="gorouter('device')">
-            <i class="el-icon-menu"></i>设备查询
-            </el-menu-item>
-             <el-menu-item index="2" @click="gorouter('vedio')"><i class="el-icon-upload" ></i>云端储存</el-menu-item>
+        <el-menu :default-active="leftIndex" class="el-menu-vertical-demo" theme="dark">
+
+            <el-menu-item index="/home/device" @click="gorouter('device')"><i class="el-icon-menu"></i>设备查询 </el-menu-item>
+            <el-menu-item index="/home/vedio" @click="gorouter('vedio')"><i class="el-icon-upload" ></i>监控查看</el-menu-item>
+            <el-menu-item index="/home/inStore" @click="gorouter('inStore')"><i class="el-icon-edit" ></i>设备入库</el-menu-item>
+
         </el-menu>
     </section>
 </template>
@@ -14,15 +15,14 @@
     export default {
     	data(){
             return{
-                List:[
-                    {name:"版本管理 ",seclist:false,isactive:false,Sec_list:[
-                        {name:"版本列表"},{name:"新增apk"},{name:"新增rom"},{name:"新增patch"},{name:"新增app"}     
-                    ]},
-               ] 
+                leftIndex:''
             }
         },
         created(){
-           
+            this.leftIndex = this.$route.path
+            if(this.$route.path == '/home/devStatus'){
+                this.leftIndex = '/home/device'
+            }
         },
         mounted(){
             
@@ -31,12 +31,13 @@
             
         },
         methods: {
-            // 二级路由跳转，并且设置监听（版本列表）
+            // 二级路由跳转
             gorouter(path){
-                this.$router.push(path);
-                if(path!="verlist"){
-                    this.$parent.$emit("addVer");
-                }                  
+                // debugger
+                if(this.$route.path == '/home/devStatus'){
+                    this.leftIndex = '/home/device'
+                }
+                this.$router.push(path);                
             },
         },
 

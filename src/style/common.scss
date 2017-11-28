@@ -107,3 +107,53 @@ html,body{
     font-size: 14px!important;
     width: 1.2rem
 }
+
+.vedio{
+    .el-dialog{
+        background: black!important;
+        color:white;
+        position: absolute;
+        // top:15%!important;
+    }
+    .el-dialog__title{
+        color:#bfcbd9;
+    }
+    .el-table__row{
+        height: 73px;
+    }
+    tr:first-child{
+        .show{
+            position: absolute;
+            z-index: 999;
+            width: 106%;
+            left: -3%;
+            top: 0rem;
+        }
+    }
+
+    tr:last-child{
+        .show{
+            position: absolute;
+            z-index: 999;
+            width: 106%;
+            left: -3%;
+            top: -.41rem;
+        }
+    }
+    
+    .loading{
+        position: absolute;
+        top: 50%;
+        height: 0.6rem;
+        margin-top: -0.3rem;
+        line-height: 0.6rem;
+        left: 44%;
+    }
+}
+
+.instore{
+    .el-upload{
+        padding-top: .7rem;
+        margin-left: 22%;
+    }
+}

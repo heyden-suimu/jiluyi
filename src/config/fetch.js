@@ -2,6 +2,11 @@ import {
 	baseUrl
 } from './env'
 
+// import{
+// 	Promise
+// } from 'bluebird'
+// console.log()
+
 import axios from 'axios'
 
 export default async(type = 'GET', url = '', data = {},go = 'fetch',file="") => {

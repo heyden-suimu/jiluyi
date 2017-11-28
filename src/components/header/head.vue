@@ -1,13 +1,11 @@
 <template>
     <header id='head_top'>
-      <div class="tip">行程记录仪</div> 
-      <ul>
-          
-      </ul>
+      <div class="tip">行车记录仪</div> 
+      <div class="back" v-if="$route.path == '/home/devStatus' " @click="back"><span class="el-icon-arrow-left" >返回</span></div>
       <div class="user">
-            <el-checkbox v-model="refresh">自动刷新</el-checkbox>
+             <el-checkbox v-model="refresh" class = 'refresh' v-if='$route.path == "/home/vedio"' @change='getval'>自动刷新</el-checkbox>
             <el-dropdown trigger="click" @command="exit">
-              <span class="el-dropdown-link">
+              <span class="el-dropdown-link" style="cursor:pointer">
                 admin <img src="../../images/user.png" alt="">
               </span>
               <el-dropdown-menu slot="dropdown" class="exit">
@@ -20,7 +18,7 @@
 
 <script>
     import {mapState, mapActions} from 'vuex'
-    import { Button, Select } from 'element-ui'
+    import {onVue} from '../../components/common/common'
     export default {
     	data(){
             return{
@@ -29,10 +27,9 @@
         },
         created(){
             //获取用户信息
-
         },
         mounted(){
-            
+            console.log(this.$route)
         },
         props: ['signinUp', 'headTitle', 'goBack'],
         computed: {
@@ -45,8 +42,15 @@
                 'getUserInfo'
             ]),
             exit(){
+                sessionStorage.removeItem('login')
                 this.$router.push("/login")
             },
+            back(){
+                this.$router.go(-1)
+            },
+            getval(val){
+                this.$root.$emit('ndRefresh', this.refresh)
+            }
         },
 
     }
@@ -61,7 +65,7 @@
         font-size: 16px;
         background: #444967;
         position: fixed;
-        z-index: 100;
+        z-index: 999;
         left: 0;
         top: 0;
         right: 0;
@@ -77,24 +81,12 @@
             float: left;
             min-width: 100px;    
         }
-        >ul{
-            max-width:70%;
-            overflow: scroll;
-            height: 70px;
-            li{
-                float: left;
-                height: 70px;
-                line-height: 70px;
-                box-sizing:border-box; 
-                -moz-box-sizing:border-box;
-                -webkit-box-sizing:border-box;
-                padding: 0 .5rem;
-                color: #B6B4C7;
-            }
-            li:hover{
-                border-bottom: 1px solid #FC6C26;
-                color:#FC6C26;
-            } 
+        .back{
+            position: absolute;
+            bottom: .27rem;
+            left: 17%;
+            color: white;
+            cursor:pointer
         }
         .user{
             position: absolute;

@@ -21,8 +21,7 @@ export default {
     },
 
 	mounted(){
-        
-        
+                
     },
 
     components:{
@@ -58,7 +57,7 @@ export default {
             top:90px;
             right: 1.2%;;
             bottom: 0;
-            overflow: scroll;
+            overflow-y:scroll;
         }
         .el-alert{
           position: absolute;
