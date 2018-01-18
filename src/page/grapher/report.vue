@@ -61,14 +61,34 @@ export default {
                 data: []
             },
             yAxis: {
-                type: 'value',
+                type:'category',
+                min:0,
+                axisTick:{
+                    show:false
+                },
+                grid:{
+                  top:'20%',
+                  left:'10%'
+                },
+                max:1,
+                splitNumber:1,
+                minInterval:1,
                 name:'车辆数',
                 axisLabel: {
-                    formatter: '{value} '
+                    formatter: function(prams){
+                      let a = []
+                      if(prams === 0){
+                        a[0] = '不在线'
+                      } else {
+                        a[1] = '在线'                      
+                      }
+                      return a
+                    }
                 },
                 axisPointer: {
                     snap: true
                 },
+                data:['不在线','在线']
                 // max: function(value) {
                 //     return value.max + Math.ceil(value.max*0.33);
                 // }
@@ -100,8 +120,8 @@ export default {
                 {
                     name:'车辆数',
                     type:'line',
-                    smooth: true,
                     data: [],
+                    step:'start',
                     itemStyle:{
                       normal:{
                         label :{
@@ -154,7 +174,10 @@ export default {
             this.initOption = this.$options.data().initOption;
             data.res.forEach((item, index)=>{
               this.initOption.xAxis.data.push(item.clock)
-              this.initOption.series[0].data.push(item.onlineCount)
+              // this.initOption.series[0].data.push(item.onlineCount)
+              let a = index%2===0?0:1;
+              this.initOption.series[0].data.push(a)
+
             })
             
             this.drawLine()

@@ -61,10 +61,17 @@ export default {
                 data: []
             },
             yAxis: {
-                type: 'value',
                 name:'车辆数',
                 axisLabel: {
-                    formatter: '{value} '
+                    formatter: function(prams){
+                      let a = []
+                      if(prams<=5){
+                        a[0] = '不在线'
+                      } else {
+                        a[1] = '在线'                      
+                      }
+                      return a
+                    }
                 },
                 axisPointer: {
                     snap: true
@@ -74,27 +81,27 @@ export default {
                 // }
             },
             visualMap: {
-                show: false,
-                dimension: 0,
-                pieces: [{
-                    lte: 6,
-                    color: 'gray'
-                }, {
-                    gt: 6,
-                    lte: 8,
-                    color: 'gray'
-                }, {
-                    gt: 8,
-                    lte: 14,
-                    color: 'gray'
-                }, {
-                    gt: 14,
-                    lte: 17,
-                    color: 'gray'
-                }, {
-                    gt: 17,
-                    color: 'gray'
-                }]
+                // show: false,
+                // dimension: 0,
+                // pieces: [{
+                //     lte: 6,
+                //     color: 'gray'
+                // }, {
+                //     gt: 6,
+                //     lte: 8,
+                //     color: 'gray'
+                // }, {
+                //     gt: 8,
+                //     lte: 14,
+                //     color: 'gray'
+                // }, {
+                //     gt: 14,
+                //     lte: 17,
+                //     color: 'gray'
+                // }, {
+                //     gt: 17,
+                //     color: 'gray'
+                // }]
             },
             series: [
                 {
