@@ -6,7 +6,7 @@
              <el-checkbox v-model="refresh" class = 'refresh' v-if='$route.path == "/home/vedio"' @change='getval'>自动刷新</el-checkbox>
             <el-dropdown trigger="click" @command="exit">
               <span class="el-dropdown-link" style="cursor:pointer">
-                admin <img src="../../images/user.png" alt="">
+                {{name}} <img src="../../images/user.png" alt="">
               </span>
               <el-dropdown-menu slot="dropdown" class="exit">
                 <el-dropdown-item command="a">退出</el-dropdown-item>
@@ -21,16 +21,21 @@
     import {onVue} from '../../components/common/common'
     export default {
     	data(){
+            let info = JSON.parse(sessionStorage.login);
+            let name = info.username
             return{
-              refresh:false, 
+              refresh:false,
+              name,
             }
         },
         created(){
             //获取用户信息
         },
+
         mounted(){
-            console.log(this.$route)
+
         },
+        
         props: ['signinUp', 'headTitle', 'goBack'],
         computed: {
             ...mapState([
@@ -90,7 +95,10 @@
         }
         .user{
             position: absolute;
-            width: 18%;
+            width: 40%;
+            text-overflow:ellipsis ;
+            overflow: hidden;
+            white-space: nowrap;
             min-width: 200px;
             right: 0;
             height: 70px;
@@ -98,9 +106,13 @@
             top: 0;
             text-align: right;
             span{
-                margin-right: 1rem;
                 font-size: 15px;
+                width: 1.5rem;
+                display: inline-block;
                 text-decoration: underline;
+                text-overflow:ellipsis ;
+                overflow: hidden;
+                white-space: nowrap;
             }
             .el-checkbox{
                 color: #B6B4C7;
@@ -109,8 +121,9 @@
                 right: 2rem;
             }
             .el-dropdown{
+                margin-right: 1rem;
                 position: absolute;
-                right: .7rem;
+                right: .1rem;
                 color: white;
                 height: .6rem;
                 img{

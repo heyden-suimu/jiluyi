@@ -6,14 +6,14 @@
  * imgBaseUrl: 图片所在域名地址
  * 
  */
-let baseUrl; 
+let baseUrl;
 let routerMode;
 const imgBaseUrl = 'https://fuss10.elemecdn.com';
 
 if (process.env.NODE_ENV == 'development') {
 	baseUrl = 'http://api.chetuyou.com:8082';
 	routerMode = 'hash'
-}else{
+} else {
 	baseUrl = 'http://api.chetuyou.com:8082';
 	routerMode = 'hash'
 }

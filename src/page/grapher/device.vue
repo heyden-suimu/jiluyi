@@ -132,7 +132,7 @@
 <script>
     import {mapState, mapActions} from 'vuex' 
     import {deviceApi, deviceCount} from '../../service/getData'
-    import {layer, DateFormat} from '../../components/common/common'
+    import {layer, DateFormat, exit, checkPro} from '../../components/common/common'
     import _ from 'lodash'
     export default {
     	data(){
@@ -160,9 +160,11 @@
         },
         created(){
             // 获取用户信息
-            // this.exit()
+
         },
         mounted(){
+            exit(this)
+            checkPro('deviceInfo', this)
             this.initDev();
         },
        

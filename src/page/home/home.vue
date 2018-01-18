@@ -55,9 +55,9 @@ export default {
             position: absolute;
             left: 17%;
             top:90px;
-            right: 1.2%;;
+            right: 1.2%;
             bottom: 0;
-            overflow-y:scroll;
+            overflow-y:auto;
         }
         .el-alert{
           position: absolute;

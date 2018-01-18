@@ -14,8 +14,11 @@
 </template>
 
 <script>
-    import alertTip from '../../components/common/alertTip'
+
+    import {layer} from '../../components/common/common'
     import {mapState, mapMutations} from 'vuex' 
+    import md5 from 'js-md5'
+    import {login} from '../../service/getData'
 
     export default {
         data(){
@@ -28,11 +31,23 @@
                 alertText: null, //提示的内容
             }
         },
+        mounted(){
+            // console.log(this.$router)
+            // if(this.$router.needLoging){
+            //     layer(this, "请先登录")
+            // }
+        },
+        watch:{
+
+            // $router : function(val, oldVal) {
+            //     console.log(val)
+            // }
+        },
         created(){
             
         },
         components: {
-            alertTip,
+
         },
         computed: {
             
@@ -41,30 +56,48 @@
             //发送登陆信息
             async mobileLogin(){
                 if (!this.userAccount) {
-                    this.layer("请输入用户名")              
+                    layer(this, "请输入用户名")              
                     return
                 }
                 if(!this.passWord){
-                    this.layer("密码不能为空")              
+                    layer(this, "密码不能为空")              
                     return
                 }
-                if(this.userAccount==this.user_name&&this.passWord==this.password){
-                    sessionStorage.setItem('login',true)
-                    this.$router.push("/home")
-                }else{
-                    this.layer("账号或密码不存在")
-                }
+               let data = await login('post', {
+                  username: this.userAccount,
+                  password: md5(this.passWord)
+               })
+               if(data.code === 0){
+                    let obj = data.res
+                    obj.login = true
+                    sessionStorage.setItem('login',JSON.stringify(obj))
+
+                    if(obj.deviceInfo){
+                        this.$router.push({path:'home/device'})
+                        return
+                    } else if (obj.monitorView) {
+                        this.$router.push({path:'home/vedio'})
+                        return
+                    } else if (obj.shockParameter) {
+                        this.$router.push({path:'home/setPram'})
+                        return
+                    } else if (obj.deviceStorage) {
+                        this.$router.push({path:'home/inStore'})
+                        return
+                    } else if (obj.statisticalReport) {
+                        this.$router.push({path:'home/report'})
+                        return
+                    } else if (obj.level >=2) {
+                        this.$router.push({path:'home/userMag'})
+                        return
+                    } else{
+                        this.$router.push({path:'home'})
+                    }
+                    
+               }else{
+                  layer(this,data.ch||data.message||'数据错误')
+               }
             },
-            closeTip(){
-                this.showAlert = false;
-            },
-            layer(text){
-                this.showAlert = true;
-                this.alertText = text;
-                setTimeout(() =>{
-                    this.showAlert = false;           
-                },800) 
-            }
         }
     }
 

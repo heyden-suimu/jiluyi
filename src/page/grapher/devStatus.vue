@@ -4,8 +4,7 @@
             <h3>设备详情</h3>
             <div class="devInfo info">
 
-                 <el-row>
-
+                <el-row>
                   <el-col :span="8"><div class="grid-content bg-purple">
                       <span>设备编号：</span><span>{{device.deviceId||'--'}}</span>
                   </div></el-col>
@@ -15,8 +14,8 @@
                   <el-col :span="8"><div class="grid-content bg-purple-light">
                       <span>电话号：</span><span>{{device.phoneNumber||'--'}}</span>
                   </div></el-col>
-
                 </el-row>
+
                 <el-row>
                   <el-col :span="8"><div class="grid-content bg-purple-light">
                       <span>IMEI：</span><span>{{device.imei||'--'}}</span>
@@ -27,8 +26,8 @@
                   <el-col :span="8"><div class="grid-content bg-purple-light">
                       <span>硬件版本：</span><span>{{device.romVersion||'--'}}</span>
                   </div></el-col>
-
                 </el-row>
+
                 <el-row>
                   <el-col :span="8"><div class="grid-content bg-purple-light">
                       <span>软件版本：</span><span>{{device.appVersion||'--'}}</span>
@@ -40,6 +39,7 @@
                       <span>最后在线：</span><span>{{device.updatedTime||'--'}}</span>
                   </div></el-col>
                 </el-row>
+
                 <el-row>
                   <el-col :span="8"><div class="grid-content bg-purple-light">
                       <span>备注：</span><span>{{device.remarks||'--'}}</span>
@@ -47,7 +47,7 @@
                   <el-col :span="8"><div class="grid-content bg-purple">
                       <span>MAC地址：</span><span>{{device.macAddress||'--'}}</span>
                   </div></el-col>
-                </el-row>     
+                </el-row>      
 
             </div>
            <div class="wrap-map">
@@ -64,10 +64,14 @@
                       <span>TF卡：</span><span :class='{"red":device.sdcardStatus!="正常"}'>{{device.sdcardStatus||'--'}}</span>
                   </div></el-col>
                   <el-col :span="6"><div class="grid-content bg-purple-light">
-                      <span>行车记录仪：</span><span :class="{'red':device.frontRecordingStatus=='停止工作'}">{{device.frontRecordingStatus}}</span>
+                      <span>行车记录仪：</span><span :class="{'red':device.frontRecordingStatus=='停止工作'}">{{device.frontRecordingStatus}}</span><br/>
+                      <!-- <span style="padding-top:2px;display:inline-block">视屏丢失率：</span>
+                      <span>{{device.frontFailureRate | percentEg}}</span> -->
                   </div></el-col>
                   <el-col :span="6"><div class="grid-content bg-purple">
-                      <span>车内监控：</span><span :class="{'red': device.innerRecordingStatus=='停止工作'}">{{device.innerRecordingStatus}}</span>
+                      <span>车内监控：</span><span :class="{'red': device.innerRecordingStatus=='停止工作'}">{{device.innerRecordingStatus}}</span><br/>
+                      <!-- <span style="padding-top:2px;display:inline-block">视屏丢失率：</span>
+                      <span>{{device.insideFailureRate | percentEg}}</span> -->
                   </div></el-col>
                   <el-col :span="6"><div class="grid-content bg-purple-light">
                       <span style="float:left">GPS：</span><span style="text-align:right;display:inline-block">{{device.gps[0].toFixed(6)}},<br/>{{device.gps[1].toFixed(6)}} </span>
@@ -116,7 +120,7 @@
 
 <script>
     import {mapState, mapActions} from 'vuex'
-    import {layer, DateFormat} from '../../components/common/common'
+    import {layer, DateFormat, exit, checkPro} from '../../components/common/common'
     import AMap from 'AMap'
     export default {
     	data(){
@@ -126,11 +130,12 @@
         },
         created(){
             //获取用户信息
-            this.exit()
             this.device = JSON.parse(this.$route.query.device)
             // debugger
         },
         mounted(){
+            exit(this)
+            checkPro('deviceInfo', this)
             this.init()
         },
        
@@ -167,6 +172,16 @@
             }
         },
 
+        filters:{
+          percentEg(val){
+            if (!val && val != 0) {
+              return '--'
+            } else {
+              return val.toFixed(2)+'%'
+            }
+          }
+        }
+
     }
 
 </script>
@@ -176,7 +191,7 @@
 
     .devStatus{
         font-size: 14px;
-        padding: .1rem 0 0 .1rem;
+        padding: .1rem .08rem 0 .1rem;
         .devAbout{
             .devInfo{
                 height: 2.6rem;

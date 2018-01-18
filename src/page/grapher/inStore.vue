@@ -37,7 +37,7 @@
                 <el-col :span="24">
                     <div class="grid-content bg-purple-light">
                         <span>手机号：</span>
-                         <el-input v-model = 'submit.phoneNumber' class="keys" placeholder="请输入ICCID对应手机号" @keyup.native='Search'></el-input>
+                         <el-input v-model = 'submit.phoneNumber' class="keys" placeholder="请输入手机号" @keyup.native='Search'></el-input>
                     </div>
                  </el-col>
             </el-row>
@@ -123,7 +123,7 @@
 </template>
 
 <script>
-    import {layer} from '../../components/common/common'
+    import {layer, exit, checkPro} from '../../components/common/common'
     import {addDevice} from '../../service/getData'
 
 export default {
@@ -145,7 +145,8 @@ export default {
         }
     },
     created(){
-        this.exit()
+        exit(this)
+        checkPro('deviceStorage', this)
     },
 	mounted(){
                 

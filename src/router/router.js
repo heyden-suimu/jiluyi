@@ -6,6 +6,12 @@ const device = r => require.ensure([], () => r(require('../page/grapher/device')
 const vedio = r => require.ensure([], () => r(require('../page/grapher/vedio')), 'vedio')
 const devStatus = r => require.ensure([], () => r(require('../page/grapher/devStatus')), 'devStatus')
 const inStore = r => require.ensure([], () => r(require('../page/grapher/inStore')), 'inStore')
+const report = r => require.ensure([], () => r(require('../page/grapher/report')), 'report')
+const userMag = r => require.ensure([], () => r(require('../page/grapher/userMag')), 'userMag')
+const editUser = r => require.ensure([], () => r(require('../page/grapher/editUser')), 'editUser')
+const setPram = r => require.ensure([], () => r(require('../page/grapher/setPram')), 'setPram')
+const notFound = r => require.ensure([], () => r(require('../page/notFound')), 'notFound')
+const notPro = r => require.ensure([], () => r(require('../page/notPro')), 'notPro')
 
 export default [{
     path: '/',
@@ -17,6 +23,10 @@ export default [{
             redirect: '/login'
         },
         {
+            path: '/notFound',
+            component: notFound,
+        },
+        {
             path: '/home',
             component: home,
             children:[
@@ -25,6 +35,11 @@ export default [{
                 {path: '/home/vedio',component: vedio},
                 {path: '/home/devStatus',component: devStatus},
                 {path: '/home/inStore',component: inStore},
+                {path: '/home/report',component: report},
+                {path: '/home/userMag',component: userMag},
+                {path: '/home/editUser',component: editUser}, 
+                {path: '/home/setPram',component: setPram}, 
+                {path: '/home/notPro',component: notPro}, 
             ]
         },
         //登陆注册页
@@ -32,5 +47,9 @@ export default [{
             path: '/login',
             component: login
         },
+        {
+            path: '*',
+            redirect: '/notFound',
+        }
     ]
 }]

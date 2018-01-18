@@ -42,4 +42,43 @@ const DateFormat = function(fmt) {
 }
 
 const onVue = new Vue();
-export {getPrams, layer, onVue, DateFormat}
+// 退出
+let exit = (vm)=>{
+    let login = sessionStorage.login && JSON.parse(sessionStorage.login);
+    if(!sessionStorage.login || (sessionStorage.login && !login.login)){
+        layer(vm,"先请登录", "warning");
+        sessionStorage.clear();
+        vm.$router.push("/login");
+    } 
+}
+
+//判断中断
+const check = function(arr, vm){
+
+    return arr.some((item,index)=>{
+       return _a(item.bol, item.msg)
+    })
+
+    function _a(bol,msg){
+      if(bol){
+        layer(vm, msg)
+        return true
+      }
+    }
+
+}
+
+const checkPro = function(path, vm, bol=false){
+    let login = JSON.parse(sessionStorage.login)
+    let notAdmin = login.level<2;
+
+    if (path === 'admin') {
+        login[path] = true;
+    }
+
+    if(!login[path] || (bol&&notAdmin)){
+        vm.$router.push({path:'notPro'})
+    }
+}
+
+export {getPrams, layer, onVue, DateFormat, exit, check, checkPro}

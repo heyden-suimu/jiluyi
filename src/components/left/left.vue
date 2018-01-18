@@ -2,9 +2,7 @@
     <section id='left'>
         <el-menu :default-active="leftIndex" class="el-menu-vertical-demo" theme="dark">
 
-            <el-menu-item index="/home/device" @click="gorouter('device')"><i class="el-icon-menu"></i>设备查询 </el-menu-item>
-            <el-menu-item index="/home/vedio" @click="gorouter('vedio')"><i class="el-icon-upload" ></i>监控查看</el-menu-item>
-            <el-menu-item index="/home/inStore" @click="gorouter('inStore')"><i class="el-icon-edit" ></i>设备入库</el-menu-item>
+            <el-menu-item v-for='(item, index) in nav' :index="`/home/${item.route}`" @click="gorouter(item.route)" v-if="getPrority(item.pname)"><i :class="item.icon" ></i>{{item.text}} </el-menu-item>
 
         </el-menu>
     </section>
@@ -15,7 +13,15 @@
     export default {
     	data(){
             return{
-                leftIndex:''
+                leftIndex:'',
+                nav:[
+                    {route:'device',icon:'el-icon-menu', text:'设备查询', pname:'deviceInfo'},
+                    {route:'vedio',icon:'el-icon-upload', text:'监控查看', pname:'monitorView'},
+                    {route:'setPram',icon:'el-icon-setting', text:'参数配置', pname:'shockParameter'},
+                    {route:'inStore',icon:'el-icon-edit', text:'设备入库', pname:'deviceStorage'},
+                    {route:'report',icon:'el-icon-heyden-tongjibaobiao', text:'统计报表', pname:'statisticalReport'},
+                    {route:'userMag',icon:'el-icon-heyden-account-16', text:'账号管理', pname:'admin'},
+                ]
             }
         },
         created(){
@@ -39,6 +45,19 @@
                 }
                 this.$router.push(path);                
             },
+
+            getPrority(name){
+
+                let info = JSON.parse(sessionStorage.login)
+                if(name === 'admin' && info.level >= 2){
+                    return true
+                } else if (name ==='admin' && info.level < 2){
+                    return false
+                } else {
+                    return info[name]
+                }
+                
+            }
         },
 
     }

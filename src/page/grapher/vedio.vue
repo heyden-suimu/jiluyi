@@ -20,10 +20,10 @@
               <el-col :span="8">
 
                 <div class="grid-content bg-purple-light">
-                    <span>时间段：</span>
+                    <span>开始时间：</span>
                      <el-date-picker
-                      v-model="dateM"
-                      type="datetimerange"
+                      v-model="dateM[0]"
+                      type="datetime"
                       placeholder="选择日期范围"
                       @change='filterSearch'>
                     </el-date-picker>
@@ -31,15 +31,21 @@
 
               </el-col>
 
-              <el-col :span="10">
+              <el-col :span="8">
 
                 <div class="grid-content bg-purple-light">
-                    <span>关键字：</span>
-                    <el-input v-model = 'search.key' class="keys" placeholder="车牌号、IMEI" @keyup.native='Search' style="width:2.6rem"></el-input>
+                    <span>结束时间：</span>
+                     <el-date-picker
+                      v-model="dateM[1]"
+                      type="datetime"
+                      placeholder="选择日期范围"
+                      @change='filterSearch'>
+                    </el-date-picker>
                 </div>
 
               </el-col>
             </el-row>
+              
             
             <el-row>
                 <el-col :span="6">
@@ -66,7 +72,17 @@
                     </div>
 
                   </el-col>
+
+                  <el-col :span="10">
+
+                    <div class="grid-content bg-purple-light">
+                        <span>关键字：</span>
+                        <el-input v-model = 'search.key' class="keys" placeholder="车牌号、IMEI" @keyup.native='Search' style="width:2.6rem"></el-input>
+                    </div>
+
+                </el-col>
               </el-row>
+              
         </div>
 
         <div class="Device_body">
@@ -75,24 +91,36 @@
                 border
                 style="width: 100%">
                 <el-table-column
-                  align="center"
-                  prop="date"
-                  label="缩略图"
-                  width="">
+                  prop="videoType"
+                  label="#"
+                  width="40"
+                  align="left"
+                  show-overflow-tooltip
+                >
 
-                  <template scope="scope">
-                    <img :src="`data:image/png;base64,${scope.row.thumbnail}`" alt="" @mouseover="test($event)"  @mouseout='test2($event)' :class="{'logo':true}" v-if="!move">
-                    <img :src="`data:image/png;base64,${scope.row.thumbnail}`" alt="" @mouseover="test"  @mouseout='test2($event)' :class="{'show':move,'logo':true}" v-if="move">
+                 <template scope="scope">
+                        <img src="../../images/red.png" alt="" v-if="scope.row.videoType ==1" class="videoType">
+                        <img src="../../images/green.png" alt="" v-if="scope.row.videoType ==0" class="videoType">
                   </template>
 
                 </el-table-column>
-                <!-- <el-table-column
+                <el-table-column
                   align="center"
-                  prop="name"
-                  label="文件名"
-                  show-overflow-tooltip
-                > -->
-               <!--  </el-table-column>
+                  prop="date"
+                  width="96"
+                  label="缩略图"
+                  >
+
+                  <template scope="scope">
+                      <div class="wrap">
+                        <img :src="scope.row.thumbnail?`data:image/png;base64,${scope.row.thumbnail}`:require('../../images/noPic.png') " alt="" @mouseover="test($event)"  @mouseout='test2($event)' :class="{'logo':true}" v-if="!move">
+                        <img :src="scope.row.thumbnail?`data:image/png;base64,${scope.row.thumbnail}`:require('../../images/noPic.png') " alt="" @mouseover="test"  @mouseout='test2($event)' :class="{'show':move,'logo':true}" v-if="move">
+                      </div>
+                  </template>
+
+                </el-table-column>
+                
+               <!--  
                 <el-table-column
                   align="center"
                   prop="deviceId"
@@ -161,6 +189,7 @@
                 <el-table-column
                   align="center"
                   prop="address"
+                  width='90'
                   label="操作">
 
                    <template scope="scope">
@@ -169,8 +198,6 @@
 
                             <a :href="scope.row.downloadUrl" download="1" v-if='scope.row.downloadUrl&&scope.row.status == 2' class="download">下载</a>
                             <el-button @click="readVedio(scope.row,scope.$index)" type="text" size="small" v-if='scope.row.status== 2&&scope.row.playUrl'>播放</el-button>
-                            <el-button @click="deleteVedio(scope.row,scope.$index)" type="text" size="small" v-if='scope.row.status == 2' style="margin-left:-.01rem!important" class='delteSpan'>删除</el-button>
-
                         <el-button @click="upLoadDev(scope.row,scope.$index)" type="text" size="small" v-if='scope.row.status <= 0 '>{{scope.row.status==0?"上传":'重新上传'}}</el-button><br/>
                         <span v-if='scope.row.status.progress>=-1'  class="loading">--</span>
     
@@ -210,7 +237,7 @@
 
 <script>
     import {vedioApi, vedioDel, uploadVideo, progressVideo} from '../../service/getData'
-    import {layer, DateFormat} from '../../components/common/common'
+    import {layer, DateFormat, exit, checkPro} from '../../components/common/common'
     import _ from 'lodash'
 
     export default {
@@ -232,7 +259,7 @@
                 dialogTableVisible:false,
                 move:false,
                 total:0,
-                dateM:'',
+                dateM:[],
                 pageSize:10,
                 currentPage:1,
                 videoSrc:'',
@@ -245,7 +272,8 @@
         },
 
         created(){
-              this.exit()
+              exit(this)
+              checkPro('monitorView', this)
         },
 
         mounted(){
@@ -304,12 +332,6 @@
                 }
             },
 
-            exit(){
-                if(!sessionStorage.login){
-                    layer(this,'请先登录')
-                    this.$router.push("/login")
-                }
-            },
             readVedio(row, index){
                 this.dialogTableVisible = true;
                 this.videoSrc = row.playUrl;
@@ -379,6 +401,7 @@
                                         hasVideoId = true;
                                         that.vedioList[index1].status={}
                                         that.vedioList[index1].status.progress = item.progress
+                                        that.vedioList[index1].status.status = item.status
                                         if(item.status == 3){
                                            that.vedioList[index1].status.progress = -1
                                            that.vedioList[index1].status.status = 3;
@@ -466,8 +489,10 @@
                     return text;
                 }else if(val.progress >=0 ){
                     return val.progress + '%'
-                }else if(val.progress == -1){
+                }else if(val.progress == -1&&val.status == 3){
                     return '转码中'
+                }else{
+                  return '--'
                 }
                
             },
@@ -535,7 +560,7 @@
                     }
                 }
             }
-            .el-col:nth-child(1){
+            .el-col{
                 .grid-content{
                     >span{
                         width: .9rem;
@@ -571,13 +596,22 @@
         }
         .logo{
             width: .8rem;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%)
+        }
+        .wrap{
+            width: 0rem;
+            height: .8rem;
         }
         .show{
             position: absolute;
-            z-index: 999;
-            width: 106%;
-            left: -3%;
-            top: -.2rem;
+            z-index: 999999;
+            left: 50%;
+            top: 50%;
+            transform:translate(-50%, -50%) scale(1.5, 1.5);
+            transition: .2s;
         }
         .el-dialog{
             background: black!important;
@@ -590,6 +624,10 @@
         .download{
             font-size: 12px;
             color: #20a0ff;
+        }
+
+        .videoType{
+          width: .16rem;
         }
 
     }

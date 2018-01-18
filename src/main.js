@@ -6,6 +6,8 @@ import store from './store/'
 import {routerMode} from './config/env'
 import './config/rem'
 import FastClick from 'fastclick'
+import echarts from 'echarts'
+import {layer} from './components/common/common'
 
 if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', function() {
@@ -14,12 +16,24 @@ if ('addEventListener' in document) {
 }
 
 Vue.use(VueRouter)
+Vue.prototype.$echarts = echarts 
 const router = new VueRouter({
 	routes,
 	mode: routerMode,
 	strict: process.env.NODE_ENV !== 'production'
 })
+let layerLogin = new Vue()
+router.beforeEach((to, from, next) => {
 
+	let login = sessionStorage.login && JSON.parse(sessionStorage.login)
+
+	if(to.path.indexOf("/home") !== -1 && !login){
+		next({path:'/login'})
+		layer(layerLogin,"请先登录",'warning')
+	} else {
+		next();
+	}
+})
 Vue.use(ElementUI)
 new Vue({
 	router,
